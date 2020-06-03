@@ -5,12 +5,10 @@ button.on("change", init);
 function buildMetadata(sample) {
     d3.json("samples.json").then((searchData)=>{
     var sampledata = searchData.metadata
-    //console.log(sampledata);
     var dropdownMenu = d3.select("#sample-metadata");
 
     var filterarray = sampledata.filter(data => data.id == sample);
     var firstItem = filterarray[0];
-    console.log(firstItem);
     
     // Use `.html("") to clear any existing metadata
     dropdownMenu.html("");
@@ -39,32 +37,15 @@ function buildCharts(sample) {
 
     var selectedsample_values = firstItem.sample_values
     var values = selectedsample_values.slice(0,10);
-    console.log("Values:");
-    console.log(values);
 
     var selectedOtu_labels = firstItem.otu_labels;
-    console.log(selectedOtu_labels);
-    // Object.entries(selectedOtu_labels).forEach((string) =>{
-    //   var replaceTest = selectedOtu_labels.replace("Bacteria;","");
-    // }
     var replaceTest= selectedOtu_labels.slice(0,10);
 
     for (var i =0; i<replaceTest.length; i++){
-      console.log(replaceTest[i]);
-      // if (replaceTest[i].includes("Bacteria;")){
         replaceTest[i] = replaceTest[i].replace("Bacteria;","");
-      // else (replaceTest)
-      // }
-      
-      console.log(replaceTest)
     };
     var labels = replaceTest;
-    //var replaceTest = selectedOtu_labels.replace("Bacteria;","");
-    // console.log("Replace Test");
-    // console.log(replaceTest);
-    // var labels = replaceTest.slice(0,10);
-    // console.log("Labels:");
-    // console.log(labels);
+
   
     var trace1 = {
       x: values,
@@ -75,16 +56,6 @@ function buildCharts(sample) {
       orientation: "h"
     };
 
-    // var trace2 = {
-    //   x: firstItem.map(row => row.sample_values),
-    //   y: firstItem.map(row => row.otu_ids),
-    //   text: firstItem.map(row => row.otu_labels),
-    //   name: "Greek",
-    //   type: "bar",
-    //   orientation: "h"
-    // };
-
-    // data
     var chartData = [trace1];
 
     // Apply the group bar mode to the layout
@@ -147,6 +118,11 @@ function init() {
     //};
   });
 };
+
+function optionChanged(nextSample){
+  buildMetadata(nextSample);
+  buildCharts(nextSample);
+}
 
 // Initialize the dashboard
 init();
